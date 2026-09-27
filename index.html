@@ -748,6 +748,8 @@
     .track-list li::before { content:none; }
     .track-link { width:100%; display:grid; grid-template-columns:34px minmax(0,1fr) auto auto; gap:12px; align-items:center; min-height:46px; padding:9px 0; border:0; background:transparent; color:inherit; text-align:left; cursor:pointer; }
     .track-link::before { content:counter(tracks, decimal-leading-zero); color:#9e9992; font:400 9px/1 "IBM Plex Mono",monospace; }
+    .track-link.track-static { cursor:default; }
+    .track-explicit { color:var(--accent); font:500 8px/1 "IBM Plex Mono",monospace; letter-spacing:.08em; text-transform:uppercase; }
     .track-list li:hover { padding:0; }
     .track-list li.is-playing { color:#fff; background:rgba(255,45,149,.15); }
     .track-list li.is-playing .track-link { padding-inline:10px 8px; }
@@ -1705,6 +1707,22 @@
       var copyTimer;
       var selectedIndex = 1;
       var trackData = {
+        citric: [
+          ['Ciтгic Коsмоs','3:40',null,null,true],
+          ['Minnesota','2:12'],
+          ['Elapse','2:37'],
+          ['xHEDx','2:02',null,null,true],
+          ['Shroud','1:52'],
+          ['Depths','2:47'],
+          ['Synyster Trails','1:50'],
+          ['M!ndF*ck','2:58',null,null,true],
+          ['One More Life','3:55'],
+          ["Sizzlin' Glizzy",'2:47',null,null,true],
+          ['In the Deep End','2:28',null,null,true],
+          ['Juju','1:14'],
+          ['Lost Control','4:16'],
+          ['Swear to Myself','4:46']
+        ],
         love: [
           ['Pink Emotions','3:20','https://open.spotify.com/track/6CKNADo1lA7V0j0gEqxOJ2','https://open.spotify.com/embed/track/6CKNADo1lA7V0j0gEqxOJ2'],
           ['Lemonade','2:57','https://open.spotify.com/track/78925Zc3mC36uUHI2R0UHi','https://open.spotify.com/embed/track/78925Zc3mC36uUHI2R0UHi'],
@@ -1745,7 +1763,11 @@
         trackCount.textContent = tracks.length + ' tracks';
         nowPlaying.setAttribute('aria-label', albumName + ' track listing');
         trackList.innerHTML = tracks.map(function (track) {
-          return '<li><button class="track-link" type="button" data-embed="' + track[3] + '" data-track="' + track[0] + '" aria-label="Load ' + track[0] + ' in the Spotify player"><span class="track-name">' + track[0] + '</span><time class="track-duration">' + track[1] + '</time><span class="track-play">Load</span></button></li>';
+          var explicit = track[4] ? ' <small class="track-explicit">Explicit</small>' : '';
+          if (!track[3]) {
+            return '<li><div class="track-link track-static"><span class="track-name">' + track[0] + explicit + '</span><time class="track-duration">' + track[1] + '</time><span class="track-play" aria-hidden="true"></span></div></li>';
+          }
+          return '<li><button class="track-link" type="button" data-embed="' + track[3] + '" data-track="' + track[0] + '" aria-label="Load ' + track[0] + ' in the Spotify player"><span class="track-name">' + track[0] + explicit + '</span><time class="track-duration">' + track[1] + '</time><span class="track-play">Load</span></button></li>';
         }).join('');
       }
 
